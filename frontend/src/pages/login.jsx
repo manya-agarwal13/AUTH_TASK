@@ -42,6 +42,7 @@ export default function Login() {
         <input
           type="email"
           placeholder="Email"
+          autoComplete="email"
           value={form.email}
           onChange={(e) =>
             setForm({ ...form, email: e.target.value })
@@ -52,6 +53,7 @@ export default function Login() {
           type="password"
           placeholder="Password"
           value={form.password}
+          autoComplete="current-password"
           onChange={(e) =>
             setForm({ ...form, password: e.target.value })
           }
