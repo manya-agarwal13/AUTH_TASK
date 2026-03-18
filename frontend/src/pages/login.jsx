@@ -11,7 +11,7 @@ export default function Login() {
     password: "",
   });
 
-  // ✅ updated function
+  //  updated function
   const handleSubmit = async (e) => {
     e.preventDefault(); 
 

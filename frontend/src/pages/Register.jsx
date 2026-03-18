@@ -9,7 +9,9 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("CLIENT");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // VERY IMPORTANT
+
     try {
       console.log("Sending data:", { email, password, role });
 
@@ -27,7 +29,6 @@ export default function Register() {
     } catch (error) {
       console.error("ERROR:", error);
 
-      // 🔥 show real backend error
       if (error.response) {
         alert(error.response.data.message);
       } else {
@@ -40,29 +41,36 @@ export default function Register() {
     <div style={{ padding: "20px" }}>
       <h2>Register</h2>
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <br /><br />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          autoComplete="email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <br /><br />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br /><br />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          autoComplete="new-password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <br /><br />
 
-      <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="CLIENT">Client</option>
-        <option value="FREELANCER">Freelancer</option>
-      </select>
-      <br /><br />
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <option value="CLIENT">Client</option>
+          <option value="FREELANCER">Freelancer</option>
+        </select>
+        <br /><br />
 
-      <button onClick={handleSubmit}>Register</button>
+        <button type="submit">Register</button>
+      </form>
 
       <p>
         Already have an account? <Link to="/login">Login</Link>
