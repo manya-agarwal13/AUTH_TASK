@@ -1,8 +1,7 @@
 import { useState } from "react";
 import API from "../services/api";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,41 +11,59 @@ export default function Login() {
     password: "",
   });
 
-  const handleLogin = async () => {
-    const res = await API.post("/auth/login", form);
+  // ✅ updated function
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
 
-    const token = res.data.access_token;
+    try {
+      const res = await API.post("/auth/login", form);
 
-    localStorage.setItem("token", token);
+      const token = res.data.access_token;
 
-    const decoded = jwtDecode(token);
+      localStorage.setItem("token", token);
 
-    // Save role
-    localStorage.setItem("role", decoded.role);
+      const decoded = jwtDecode(token);
 
-    navigate("/dashboard");
+      // Save role
+      localStorage.setItem("role", decoded.role);
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error(error);
+      alert("Login failed");
+    }
   };
 
   return (
     <div>
       <h2>Login</h2>
 
-      <input
-        placeholder="Email"
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-      />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) =>
+            setForm({ ...form, email: e.target.value })
+          }
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-      />
+        <input
+          type="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={(e) =>
+            setForm({ ...form, password: e.target.value })
+          }
+        />
 
-          <button onClick={handleLogin}>Login</button>
-          
-          <p>
-  Don’t have an account? <Link to="/">Register</Link>
-</p>
+        {/* submit */}
+        <button type="submit">Login</button>
+      </form>
+
+      <p>
+        Don’t have an account? <Link to="/">Register</Link>
+      </p>
     </div>
   );
 }
